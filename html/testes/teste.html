@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Life & Health Web</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- PAGINA PRINCIPAL -->
+<div id="homepage">
+    <div class="card-homepage">
+        <img src="./img/life & health web.png" alt="">
+        <button onclick="login()">Entrar</button>
+        <button class="secondary" onclick="cadastrar()">Cadastro</button>
+    </div>
+</div>
+
+<!-- LOGIN -->
+<div id="loginPage" class="centered">
+    <div class="card">
+        <h2>Life & Health Web</h2>
+        <input type="text" id="username" placeholder="Usuário" required>
+        <input type="password" id="password" placeholder="Senha" required>
+        
+        
+        <p id="loginError"></p>
+    </div>
+</div>
+
+<!-- SISTEMA PRINCIPAL -->
+<div id="mainSystem" class="hidden">
+
+    <header>
+        <h1>Life & Health Web</h1>
+        <button onclick="logout()">Sair</button>
+    </header>
+
+    <nav>
+        <button onclick="showTab('agendamento')">Agendamento Digital</button>
+        <button onclick="showTab('admin')" id="adminTab" class="hidden">Painel Administrativo</button>
+    </nav>
+
+    <!-- ABA AGENDAMENTO -->
+    <section id="agendamento" class="tab">
+
+        <h2>Agendamento de Consulta</h2>
+
+        <div class="form-container">
+
+            <label>Selecione a Data</label>
+            <input type="date" id="dataSelecionada" onchange="mostrarHorarios()" required>
+
+            <label>Nome Completo</label>
+            <input type="text" id="nomeCompleto" required>
+
+            <label>Idade</label>
+            <input type="number" id="idade" min="0" required>
+
+            <label>E-mail</label>
+            <input type="email" id="email" required>
+
+            <label class="checkbox-label">
+                <input type="checkbox" id="alergicoRemedio" onchange="toggleRemedio()">
+                Sou alérgico(a) a algum medicamento
+            </label>
+
+            <div id="campoRemedio" class="hidden">
+                <label>Nome do medicamento</label>
+                <input type="text" id="nomeRemedio">
+            </div>
+
+        </div>
+
+        <div id="horariosContainer" class="horarios"></div>
+
+    </section>
+
+    <!-- ABA ADMIN -->
+    <section id="admin" class="tab hidden">
+        <h2>Painel Administrativo</h2>
+        <h3>Consultas Agendadas</h3>
+        <ul id="listaConsultasAdmin"></ul>
+    </section>
+
+</div>
+
+<div id="emailNotification" class="notification">
+    📧 E-mail de confirmação enviado com sucesso!
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

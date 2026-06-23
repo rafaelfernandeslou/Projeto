@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="agendamento.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+    />
+    <title>Agendamento</title>
+  </head>
+
+  <body>
+    <header class="navbar">
+      <div class="logo">
+        <img src="./img/Logo-transparente.png" alt="Life & Health Web" />
+      </div>
+
+      <nav>
+        <a href="#">Minhas consultas</a>
+        <a href="#">Suporte</a>
+      </nav>
+    </header>
+
+    <div class="container">
+      <h2>Escolha a data e horário da consulta</h2>
+
+      <div class="filtros">
+        <select>
+          <option>Selecione o tipo de consulta</option>
+        </select>
+
+        <select>
+          <option>Selecione doutor</option>
+        </select>
+      </div>
+
+      <div class="calendario">
+        <div class="mes">
+          <button id="prev"><i class="bi bi-chevron-left"></i></button>
+
+          <span id="mesAno"></span>
+
+          <button id="next"><i class="bi bi-chevron-right"></i></button>
+        </div>
+
+        <div class="dias-semana">
+          <span>Dom</span>
+          <span>Seg</span>
+          <span>Ter</span>
+          <span>Qua</span>
+          <span>Qui</span>
+          <span>Sex</span>
+          <span>Sab</span>
+        </div>
+
+        <div class="dias" id="dias"></div>
+
+        <div class="horarios">
+          <button>08:00</button>
+          <button>09:30</button>
+          <button>09:50</button>
+          <button>10:20</button>
+          <button>11:00</button>
+          <button>15:00</button>
+        </div>
+      </div>
+    </div>
+    <div class="proximo">
+        <button>Próximo</button>
+    </div>
+
+    <script>
+      const diasContainer = document.getElementById("dias");
+      const mesAno = document.getElementById("mesAno");
+      const prev = document.getElementById("prev");
+      const next = document.getElementById("next");
+      const horarios = document.querySelectorAll(".horarios button");
+
+      let data = new Date();
+
+      function renderCalendar() {
+        const mes = data.getMonth();
+        const ano = data.getFullYear();
+
+        const primeiroDia = new Date(ano, mes, 1).getDay();
+        const ultimoDia = new Date(ano, mes + 1, 0).getDate();
+
+        const meses = [
+          "Janeiro",
+          "Fevereiro",
+          "Março",
+          "Abril",
+          "Maio",
+          "Junho",
+          "Julho",
+          "Agosto",
+          "Setembro",
+          "Outubro",
+          "Novembro",
+          "Dezembro",
+        ];
+
+        mesAno.innerText = `${meses[mes]} ${ano}`;
+
+        diasContainer.innerHTML = "";
+
+        for (let i = 0; i < primeiroDia; i++) {
+          diasContainer.innerHTML += `<span></span>`;
+        }
+
+        for (let i = 1; i <= ultimoDia; i++) {
+          const dia = document.createElement("span");
+          dia.innerText = i;
+
+          dia.addEventListener("click", () => {
+            document
+              .querySelectorAll(".dias span")
+              .forEach((d) => d.classList.remove("ativo"));
+
+            dia.classList.add("ativo");
+          });
+
+          diasContainer.appendChild(dia);
+        }
+      }
+
+      prev.addEventListener("click", () => {
+        data.setMonth(data.getMonth() - 1);
+        renderCalendar();
+      });
+
+      next.addEventListener("click", () => {
+        data.setMonth(data.getMonth() + 1);
+        renderCalendar();
+      });
+
+      renderCalendar();
+
+      horarios.forEach((botao) => {
+        botao.addEventListener("click", () => {
+          // remove seleção anterior
+          horarios.forEach((b) => b.classList.remove("selecionado"));
+
+          // adiciona seleção
+          botao.classList.add("selecionado");
+        });
+      });
+    </script>
+  </body>
+</html>
