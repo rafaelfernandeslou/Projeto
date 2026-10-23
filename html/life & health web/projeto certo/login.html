@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Acesse sua conta na Life & Health Web para gerenciar suas consultas."
+    />
+    <title>Login de Usuário – Life &amp; Health Web</title>
+    <link rel="icon" type="image/png" href="imagem/Logo-transparente.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <!-- ===== HEADER ===== -->
+    <header class="header" id="header">
+      <nav class="nav container">
+        <a href="index.html" class="nav__logo">
+          <img
+            src="imagem/Logo-transparente.png"
+            alt="Life & Health Web"
+            class="nav__logo-img"
+          />
+        </a>
+
+        <!-- Links das Páginas -->
+        <ul class="nav__links" id="navLinks">
+          <li><a href="index.html" class="nav__link">Início</a></li>
+          <li><a href="agendamento.html" class="nav__link">Agendamento</a></li>
+          <li>
+            <a href="meus-agendamentos.html" class="nav__link"
+              >Meus Agendamentos</a
+            >
+          </li>
+          <li>
+            <a href="medicos.html" class="nav__link">Consultar Médicos</a>
+          </li>
+          <li>
+            <a href="produtos.html" class="nav__link">Comprar Produtos</a>
+          </li>
+          <li id="navAuthItem">
+            <a href="login.html" class="nav__link active">Login</a>
+          </li>
+        </ul>
+
+        <div class="nav__actions">
+          <div id="navUserArea"></div>
+          <a href="agendamento.html" class="btn btn--primary btn--sm">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              style="width: 16px; height: 16px"
+            >
+              <rect x="3" y="4" width="18" height="18" rx="2" />
+              <line x1="16" y1="2" x2="16" y2="6" />
+              <line x1="8" y1="2" x2="8" y2="6" />
+              <line x1="3" y1="10" x2="21" y2="10" />
+            </svg>
+            Agendar Consulta
+          </a>
+          <button class="nav__burger" id="navBurger" aria-label="Menu Mobile">
+            <span></span><span></span><span></span>
+          </button>
+        </div>
+      </nav>
+    </header>
+
+    <!-- ===== CONTEÚDO PRINCIPAL ===== -->
+    <main class="tab-wrapper" style="display: block">
+      <section class="container section-padding auth-container">
+        <div class="auth-card card-box shadow-blue">
+          <div class="auth-header">
+            <div class="auth-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4M10 17l5-5-5-5M15 12H3"
+                />
+              </svg>
+            </div>
+            <h1>Acesse sua Conta</h1>
+            <p>Entre com seu e-mail e senha cadastrados no Banco de Dados.</p>
+          </div>
+
+          <form id="formLogin" onsubmit="executarLogin(event)">
+            <div class="form-group">
+              <label for="loginEmail">E-mail</label>
+              <input
+                type="email"
+                id="loginEmail"
+                class="input-control"
+                placeholder="seuemail@exemplo.com"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="loginSenha">Senha</label>
+              <input
+                type="password"
+                id="loginSenha"
+                class="input-control"
+                placeholder="••••••••"
+                required
+              />
+            </div>
+
+            <div
+              class="auth-remember"
+              style="
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 20px;
+              "
+            >
+              <label
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 6px;
+                  font-size: 0.9rem;
+                  cursor: pointer;
+                "
+              >
+                <input type="checkbox" checked /> Lembrar meu acesso
+              </label>
+              <a
+                href="#"
+                onclick="
+                  alert(
+                    'Instruções de recuperação foram enviadas ao seu e-mail!',
+                  )
+                "
+                style="font-size: 0.85rem; color: var(--clr-primary)"
+                >Esqueceu a senha?</a
+              >
+            </div>
+
+            <button type="submit" class="btn btn--primary btn--full btn--lg">
+              Entrar na Conta
+            </button>
+          </form>
+
+          <!-- Acessos Rápidos de Demonstração -->
+          <div
+            style="
+              margin-top: 24px;
+              padding: 14px;
+              background: #f8fafc;
+              border-radius: var(--radius-sm);
+              border: 1px dashed var(--clr-border);
+            "
+          >
+            <div
+              style="
+                font-size: 0.82rem;
+                font-weight: 700;
+                color: #64748b;
+                margin-bottom: 8px;
+                text-transform: uppercase;
+              "
+            >
+              🔑 Acessos Rápidos de Teste (Cadastrados no Banco):
+            </div>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap">
+              <button
+                type="button"
+                class="btn btn--outline btn--sm"
+                onclick="preencherDemo('paciente@lifehealth.com', '123456')"
+              >
+                Paciente (123456)
+              </button>
+              <button
+                type="button"
+                class="btn btn--outline btn--sm"
+                onclick="preencherDemo('admin@lifehealth.com', 'admin123')"
+              >
+                Admin (admin123)
+              </button>
+            </div>
+          </div>
+
+          <div class="auth-footer" style="margin-top: 20px; text-align: center">
+            <p>
+              Ainda não possui cadastro?
+              <a
+                href="cadastro.html"
+                style="font-weight: 700; color: var(--clr-primary)"
+                >Criar Conta Gratuita</a
+              >
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer">
+      <div class="container footer__grid">
+        <div class="footer__brand">
+          <img
+            src="imagem/Logo-transparente.png"
+            alt="Life & Health Web"
+            class="footer__logo-img"
+          />
+          <div class="nav__logo" style="margin-bottom: 8px">
+            <span class="nav__logo-text" style="color: #ffffff"
+              >Life <span class="accent">&amp;</span> Health
+              <span class="logo-sub">Web</span></span
+            >
+          </div>
+          <p>
+            Cuidado em saúde, consultas médicas e produtos de qualidade em uma
+            única plataforma integrada com Banco de Dados.
+          </p>
+        </div>
+
+        <div class="footer__links">
+          <h4>Navegação Rápida</h4>
+          <ul>
+            <li><a href="index.html">Início</a></li>
+            <li><a href="agendamento.html">Página de Agendamento</a></li>
+            <li>
+              <a href="meus-agendamentos.html">Consultar Meus Agendamentos</a>
+            </li>
+            <li><a href="medicos.html">Consultar Médicos</a></li>
+            <li><a href="produtos.html">Comprar Produtos</a></li>
+            <li><a href="login.html">Login de Acesso</a></li>
+          </ul>
+        </div>
+
+        <div class="footer__contact">
+          <h4>Atendimento</h4>
+          <p>📍 Av. Paulista, 1000 - São Paulo, SP</p>
+          <p>📞 (11) 3333-3333</p>
+          <p>📱 WhatsApp: (11) 99999-9999</p>
+          <p>✉️ contato@lifehealth.com.br</p>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <div class="container">
+          <p>
+            &copy; 2026 Life &amp; Health Web. Todos os direitos reservados.
+            Design em Azul e Branco.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="db.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>

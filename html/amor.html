@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Um site poético e moderno dedicado ao amor em todas as suas formas — descoberta, profundidade e eternidade." />
+  <title>Amor — A Arte de Sentir</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&family=Dancing+Script:wght@600&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── Design Tokens ─────────────────────────────────── */
+    :root {
+      --rose:        #ff3e6c;
+      --rose-light:  #ff7096;
+      --rose-dark:   #c2185b;
+      --violet:      #7c3aed;
+      --violet-light:#a855f7;
+      --gold:        #f59e0b;
+      --gold-light:  #fcd34d;
+      --cream:       #fff1f5;
+      --dark:        #0f0514;
+      --dark-mid:    #1a0a23;
+      --dark-card:   #1e0d2a;
+      --text-main:   #f8e8ff;
+      --text-muted:  #c4a8d4;
+      --glass-bg:    rgba(255,255,255,0.05);
+      --glass-border:rgba(255,255,255,0.12);
+    }
+
+    /* ─── Reset & Base ──────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--dark);
+      color: var(--text-main);
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    /* ─── Animated Background ───────────────────────────── */
+    .bg-canvas {
+      position: fixed; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 10%, rgba(124,58,237,0.35) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 80% 80%, rgba(255,62,108,0.30) 0%, transparent 55%),
+        radial-gradient(ellipse 50% 40% at 50% 50%, rgba(245,158,11,0.10) 0%, transparent 50%),
+        var(--dark);
+    }
+    .bg-canvas::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.02'%3E%3Ccircle cx='30' cy='30' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    /* ─── Floating Hearts ───────────────────────────────── */
+    .hearts-layer {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      overflow: hidden;
+    }
+    .heart-particle {
+      position: absolute;
+      bottom: -60px;
+      font-size: clamp(14px, 2vw, 28px);
+      animation: floatUp linear infinite;
+      opacity: 0;
+    }
+    @keyframes floatUp {
+      0%   { transform: translateY(0) rotate(0deg) scale(0.6); opacity: 0; }
+      10%  { opacity: 0.7; }
+      90%  { opacity: 0.3; }
+      100% { transform: translateY(-110vh) rotate(360deg) scale(1.2); opacity: 0; }
+    }
+
+    /* ─── Layout ────────────────────────────────────────── */
+    .content-wrapper { position: relative; z-index: 1; }
+
+    /* ─── NAV ────────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem 5%;
+      background: rgba(15,5,20,0.6);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--glass-border);
+      transition: background 0.3s;
+    }
+    .nav-logo {
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.8rem;
+      background: linear-gradient(135deg, var(--rose-light), var(--violet-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      letter-spacing: 0.04em;
+      transition: color 0.25s;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute; left: 0; bottom: -3px; width: 0; height: 1px;
+      background: linear-gradient(90deg, var(--rose), var(--violet));
+      transition: width 0.3s;
+    }
+    .nav-links a:hover { color: var(--text-main); }
+    .nav-links a:hover::after { width: 100%; }
+
+    /* ─── HERO ───────────────────────────────────────────── */
+    #hero {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      text-align: center;
+      padding: 8rem 5% 5rem;
+      position: relative;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.4rem 1.2rem;
+      border-radius: 50px;
+      border: 1px solid rgba(255,112,150,0.4);
+      background: rgba(255,62,108,0.08);
+      font-size: 0.8rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--rose-light);
+      margin-bottom: 2rem;
+      animation: fadeSlideUp 0.8s ease both;
+    }
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3.2rem, 8vw, 7rem);
+      line-height: 1.08;
+      margin-bottom: 1.5rem;
+      animation: fadeSlideUp 0.9s ease 0.1s both;
+    }
+    .hero-title .gradient-text {
+      background: linear-gradient(135deg, var(--rose-light) 0%, var(--violet-light) 50%, var(--gold-light) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      background-size: 200% 200%;
+      animation: gradientShift 4s ease-in-out infinite;
+    }
+    @keyframes gradientShift {
+      0%, 100% { background-position: 0% 50%; }
+      50%       { background-position: 100% 50%; }
+    }
+    .hero-subtitle {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(1rem, 2.5vw, 1.5rem);
+      color: var(--text-muted);
+      max-width: 600px;
+      margin: 0 auto 3rem;
+      line-height: 1.7;
+      animation: fadeSlideUp 1s ease 0.2s both;
+    }
+    .hero-ctas {
+      display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+      animation: fadeSlideUp 1s ease 0.35s both;
+    }
+    .btn-primary {
+      padding: 0.9rem 2.4rem;
+      border-radius: 50px;
+      border: none; cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600; font-size: 0.95rem;
+      background: linear-gradient(135deg, var(--rose), var(--violet));
+      color: #fff;
+      box-shadow: 0 8px 30px rgba(255,62,108,0.4);
+      transition: transform 0.25s, box-shadow 0.25s;
+      text-decoration: none;
+    }
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 14px 40px rgba(255,62,108,0.55);
+    }
+    .btn-outline {
+      padding: 0.9rem 2.4rem;
+      border-radius: 50px;
+      border: 1px solid var(--glass-border); cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      font-weight: 500; font-size: 0.95rem;
+      background: var(--glass-bg);
+      backdrop-filter: blur(10px);
+      color: var(--text-main);
+      transition: border-color 0.25s, background 0.25s, transform 0.25s;
+      text-decoration: none;
+    }
+    .btn-outline:hover {
+      border-color: var(--rose-light);
+      background: rgba(255,62,108,0.1);
+      transform: translateY(-3px);
+    }
+
+    /* ─── Scroll Indicator ───────────────────────────────── */
+    .scroll-cue {
+      position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+      font-size: 0.75rem; color: var(--text-muted); letter-spacing: 0.1em;
+      animation: bounce 2.5s ease-in-out infinite;
+    }
+    .scroll-cue svg { width: 20px; height: 20px; stroke: var(--rose-light); }
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50%       { transform: translateX(-50%) translateY(8px); }
+    }
+
+    /* ─── Section Base ───────────────────────────────────── */
+    section { padding: 7rem 5%; }
+    .section-label {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--rose-light); margin-bottom: 1rem;
+    }
+    .section-label::before {
+      content: '';
+      display: block; width: 28px; height: 1px;
+      background: var(--rose-light);
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      line-height: 1.2;
+      margin-bottom: 1.2rem;
+    }
+    .section-desc {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      line-height: 1.75;
+      max-width: 580px;
+    }
+
+    /* ─── CARDS — Fases do Amor ──────────────────────────── */
+    #fases { background: transparent; }
+    .fases-header { text-align: center; margin-bottom: 4rem; }
+    .fases-header .section-label { justify-content: center; }
+    .fases-header .section-label::before { display: none; }
+    .fases-header .section-desc { margin: 0 auto; }
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .love-card {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      padding: 2.5rem 2rem;
+      backdrop-filter: blur(16px);
+      transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.35s, border-color 0.35s;
+      cursor: default;
+      position: relative;
+      overflow: hidden;
+    }
+    .love-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: var(--card-accent, linear-gradient(90deg, var(--rose), var(--violet)));
+    }
+    .love-card:hover {
+      transform: translateY(-10px) scale(1.01);
+      box-shadow: 0 24px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,112,150,0.2);
+      border-color: rgba(255,112,150,0.25);
+    }
+    .card-icon {
+      width: 60px; height: 60px;
+      border-radius: 18px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+      background: var(--card-icon-bg, rgba(255,62,108,0.15));
+    }
+    .love-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      margin-bottom: 0.8rem;
+    }
+    .love-card p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+
+    /* ─── QUOTE SECTION ──────────────────────────────────── */
+    #poema {
+      text-align: center;
+      padding: 8rem 5%;
+      position: relative;
+    }
+    .quote-glow {
+      position: absolute;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(124,58,237,0.25) 0%, transparent 70%);
+      border-radius: 50%;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+    .big-quote {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(1.4rem, 3.5vw, 2.5rem);
+      line-height: 1.6;
+      max-width: 820px;
+      margin: 0 auto 2rem;
+      position: relative;
+    }
+    .big-quote::before {
+      content: '"';
+      display: block;
+      font-size: 8rem;
+      line-height: 0.5;
+      color: rgba(255,62,108,0.2);
+      font-family: 'Playfair Display', serif;
+      margin-bottom: 1.5rem;
+    }
+    .quote-author {
+      font-size: 0.9rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--rose-light);
+    }
+
+    /* ─── STATS / NÚMEROS ────────────────────────────────── */
+    #numeros {
+      padding: 5rem 5%;
+      background: linear-gradient(180deg, transparent 0%, rgba(124,58,237,0.08) 50%, transparent 100%);
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 2rem;
+      max-width: 900px;
+      margin: 4rem auto 0;
+      text-align: center;
+    }
+    .stat-item .stat-number {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      background: linear-gradient(135deg, var(--rose-light), var(--violet-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      display: block; line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+    .stat-item .stat-label {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      letter-spacing: 0.06em;
+    }
+
+    /* ─── TIPOS DE AMOR ──────────────────────────────────── */
+    #tipos { max-width: 1100px; margin: 0 auto; }
+    .tipos-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+    .tipos-list { list-style: none; display: flex; flex-direction: column; gap: 1.2rem; }
+    .tipo-item {
+      display: flex; align-items: flex-start; gap: 1.2rem;
+      padding: 1.4rem;
+      border-radius: 16px;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(12px);
+      transition: border-color 0.3s, background 0.3s, transform 0.3s;
+      cursor: default;
+    }
+    .tipo-item:hover {
+      border-color: rgba(255,112,150,0.3);
+      background: rgba(255,62,108,0.06);
+      transform: translateX(6px);
+    }
+    .tipo-icon { font-size: 1.6rem; flex-shrink: 0; line-height: 1; margin-top: 2px; }
+    .tipo-item h4 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      margin-bottom: 0.3rem;
+    }
+    .tipo-item p { color: var(--text-muted); font-size: 0.88rem; line-height: 1.6; }
+
+    /* ─── POESIA ─────────────────────────────────────────── */
+    #poesia {
+      text-align: center;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    .poem-lines {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(1rem, 2vw, 1.25rem);
+      line-height: 2.5;
+      color: var(--text-muted);
+    }
+    .poem-lines .highlight {
+      color: var(--text-main);
+      font-style: normal;
+      font-weight: 700;
+    }
+    .poem-lines .rose { color: var(--rose-light); }
+    .poem-lines .violet { color: var(--violet-light); }
+    .poem-lines .gold { color: var(--gold-light); }
+
+    /* ─── CTA FINAL ──────────────────────────────────────── */
+    #cta-final {
+      text-align: center;
+      padding: 8rem 5%;
+      position: relative;
+    }
+    .cta-card {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 4rem 3rem;
+      border-radius: 32px;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(20px);
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-card::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(255,62,108,0.07) 0%, rgba(124,58,237,0.07) 100%);
+    }
+    .cta-card h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      margin-bottom: 1rem;
+      position: relative;
+    }
+    .cta-card p {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      line-height: 1.7;
+      max-width: 480px;
+      margin: 0 auto 2.5rem;
+      position: relative;
+    }
+    .cta-card .btn-primary { position: relative; }
+    .pulse-ring {
+      position: absolute; top: 50%; left: 50%;
+      width: 200px; height: 200px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,62,108,0.3);
+      transform: translate(-50%, -50%);
+      animation: pulseRing 3s ease-out infinite;
+      pointer-events: none;
+    }
+    .pulse-ring:nth-child(2) { animation-delay: 1s; }
+    .pulse-ring:nth-child(3) { animation-delay: 2s; }
+    @keyframes pulseRing {
+      0%   { transform: translate(-50%, -50%) scale(0.5); opacity: 0.8; }
+      100% { transform: translate(-50%, -50%) scale(2.5); opacity: 0; }
+    }
+
+    /* ─── FOOTER ─────────────────────────────────────────── */
+    footer {
+      text-align: center;
+      padding: 2.5rem 5%;
+      border-top: 1px solid var(--glass-border);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+    footer .footer-logo {
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.5rem;
+      background: linear-gradient(135deg, var(--rose-light), var(--violet-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      display: block; margin-bottom: 0.5rem;
+    }
+
+    /* ─── Animations ─────────────────────────────────────── */
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─── Responsive ─────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .tipos-container { grid-template-columns: 1fr; gap: 2.5rem; }
+      .cta-card { padding: 3rem 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background -->
+  <div class="bg-canvas" aria-hidden="true"></div>
+  <div class="hearts-layer" id="heartsLayer" aria-hidden="true"></div>
+
+  <div class="content-wrapper">
+
+    <!-- NAV -->
+    <nav id="main-nav" role="navigation" aria-label="Navegação principal">
+      <div class="nav-logo">Amor</div>
+      <ul class="nav-links">
+        <li><a href="#fases">Fases</a></li>
+        <li><a href="#tipos">Tipos</a></li>
+        <li><a href="#poesia">Poesia</a></li>
+        <li><a href="#cta-final">Sentir</a></li>
+      </ul>
+    </nav>
+
+    <!-- HERO -->
+    <section id="hero" aria-labelledby="hero-title">
+      <div>
+        <div class="hero-badge" role="img" aria-label="Coração">
+          ♥ &nbsp; Uma experiência emocional
+        </div>
+        <h1 class="hero-title" id="hero-title">
+          O Amor é a<br />
+          <span class="gradient-text">linguagem universal</span>
+        </h1>
+        <p class="hero-subtitle">
+          "Amar é encontrar em um ser exterior a sua própria felicidade."<br />
+          — Gottfried Wilhelm Leibniz
+        </p>
+        <div class="hero-ctas">
+          <a href="#fases" class="btn-primary" id="hero-btn-explorar">Explorar ♥</a>
+          <a href="#poesia" class="btn-outline" id="hero-btn-poesia">Ler Poesia</a>
+        </div>
+      </div>
+      <div class="scroll-cue" aria-hidden="true">
+        <span>Desça</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 5v14M5 12l7 7 7-7"/>
+        </svg>
+      </div>
+    </section>
+
+    <!-- FASES DO AMOR -->
+    <section id="fases" aria-labelledby="fases-title">
+      <div class="fases-header reveal">
+        <div class="section-label">As Fases</div>
+        <h2 class="section-title" id="fases-title">Uma jornada que transforma</h2>
+        <p class="section-desc">
+          O amor não é um destino — é um caminho cheio de descobertas, crescimento e profundidade.
+        </p>
+      </div>
+      <div class="cards-grid">
+        <article class="love-card reveal"
+          style="--card-accent: linear-gradient(90deg,#ff3e6c,#ff7096); --card-icon-bg: rgba(255,62,108,0.12);">
+          <div class="card-icon">🌹</div>
+          <h3>O Primeiro Olhar</h3>
+          <p>Aquele instante mágico onde o tempo para. Um sorriso, um olhar — e o mundo ganha um novo centro de gravidade.</p>
+        </article>
+        <article class="love-card reveal"
+          style="--card-accent: linear-gradient(90deg,#7c3aed,#a855f7); --card-icon-bg: rgba(124,58,237,0.12);">
+          <div class="card-icon">🔥</div>
+          <h3>A Paixão</h3>
+          <p>Chamas que aquecem a alma. A adrenalina do novo, a química irresistível que transforma simples momentos em memórias eternas.</p>
+        </article>
+        <article class="love-card reveal"
+          style="--card-accent: linear-gradient(90deg,#f59e0b,#fcd34d); --card-icon-bg: rgba(245,158,11,0.12);">
+          <div class="card-icon">🌿</div>
+          <h3>O Crescimento</h3>
+          <p>Raízes que se entrelaçam. Quando dois mundos aprendem a dançar juntos, respeitando cada diferença, celebrando cada similaridade.</p>
+        </article>
+        <article class="love-card reveal"
+          style="--card-accent: linear-gradient(90deg,#06b6d4,#3b82f6); --card-icon-bg: rgba(6,182,212,0.12);">
+          <div class="card-icon">🌊</div>
+          <h3>A Profundidade</h3>
+          <p>Como o oceano: quieto na superfície, imenso por dentro. O amor maduro que escolhe todos os dias, mesmo sem precisar.</p>
+        </article>
+        <article class="love-card reveal"
+          style="--card-accent: linear-gradient(90deg,#ec4899,#f43f5e); --card-icon-bg: rgba(236,72,153,0.12);">
+          <div class="card-icon">⭐</div>
+          <h3>A Cumplicidade</h3>
+          <p>Rir da mesma piada depois de anos. Olhar e já saber o que o outro pensa. É quando duas almas criam sua própria linguagem.</p>
+        </article>
+        <article class="love-card reveal"
+          style="--card-accent: linear-gradient(90deg,#8b5cf6,#c084fc); --card-icon-bg: rgba(139,92,246,0.12);">
+          <div class="card-icon">♾️</div>
+          <h3>A Eternidade</h3>
+          <p>Não é sobre durar para sempre — é sobre ser tão real que a memória dele viva para além do tempo. Amor eterno existe.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- CITAÇÃO DESTAQUE -->
+    <section id="poema" aria-label="Citação sobre amor">
+      <div class="quote-glow" aria-hidden="true"></div>
+      <blockquote class="big-quote reveal">
+        "Amar alguém é dizer: <em>você não vai morrer</em>."
+      </blockquote>
+      <p class="quote-author reveal">— Gabriel Marcel</p>
+    </section>
+
+    <!-- NÚMEROS -->
+    <section id="numeros" aria-labelledby="numeros-title">
+      <div style="text-align:center;" class="reveal">
+        <div class="section-label" style="justify-content:center;">
+          <span>O amor em números</span>
+        </div>
+        <h2 class="section-title" id="numeros-title">Maior do que imaginamos</h2>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-item reveal">
+          <span class="stat-number" id="stat-1" data-target="7">0</span>
+          <span class="stat-label">Tipos de amor na filosofia grega</span>
+        </div>
+        <div class="stat-item reveal">
+          <span class="stat-number" id="stat-2" data-target="54">0</span>
+          <span class="stat-label">Neurônios ativados pelo amor</span>
+        </div>
+        <div class="stat-item reveal">
+          <span class="stat-number" id="stat-3" data-target="3">0</span>
+          <span class="stat-label">Fases neurológicas do amor</span>
+        </div>
+        <div class="stat-item reveal">
+          <span class="stat-number" id="stat-4" data-target="1">0</span>
+          <span class="stat-label">Razão para tudo</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- TIPOS DE AMOR -->
+    <section style="padding: 7rem 5%;" aria-labelledby="tipos-title">
+      <div class="tipos-container" id="tipos">
+        <div class="reveal">
+          <div class="section-label">Os Nomes do Amor</div>
+          <h2 class="section-title" id="tipos-title">Os gregos tinham uma palavra para cada sentimento</h2>
+          <p class="section-desc">
+            Na filosofia grega, o amor não era uma coisa só — era um universo de experiências únicas, cada uma com seu próprio nome sagrado.
+          </p>
+        </div>
+        <ul class="tipos-list">
+          <li class="tipo-item reveal">
+            <span class="tipo-icon">💘</span>
+            <div>
+              <h4>Eros — O Amor Romântico</h4>
+              <p>A paixão, o desejo, a atração intensa. O fogo que nasce entre dois corpos e duas almas.</p>
+            </div>
+          </li>
+          <li class="tipo-item reveal">
+            <span class="tipo-icon">🤝</span>
+            <div>
+              <h4>Philia — A Amizade Profunda</h4>
+              <p>O amor que nasce da confiança e do respeito. A lealdade entre irmãos de alma.</p>
+            </div>
+          </li>
+          <li class="tipo-item reveal">
+            <span class="tipo-icon">💛</span>
+            <div>
+              <h4>Storge — O Amor Familiar</h4>
+              <p>O afeto que não precisa de palavras. O colo que sempre acolhe, o lar que sempre aguarda.</p>
+            </div>
+          </li>
+          <li class="tipo-item reveal">
+            <span class="tipo-icon">🌟</span>
+            <div>
+              <h4>Agápe — O Amor Incondicional</h4>
+              <p>O amor que não pede nada em troca. A forma mais pura e elevada de amar — sem limites, sem fim.</p>
+            </div>
+          </li>
+          <li class="tipo-item reveal">
+            <span class="tipo-icon">🪞</span>
+            <div>
+              <h4>Philautia — O Amor Próprio</h4>
+              <p>A base de tudo. Quem aprende a se amar, aprende a amar o mundo com mais leveza e plenitude.</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- POESIA -->
+    <section style="padding:7rem 5%;" aria-labelledby="poesia-title">
+      <div id="poesia" class="reveal">
+        <div class="section-label" style="justify-content:center; margin-bottom:2rem;">Poesia</div>
+        <h2 class="section-title" id="poesia-title" style="margin-bottom:3rem;">Palavras que o coração já conhecia</h2>
+        <div class="poem-lines">
+          <span class="rose highlight">Amar</span> é deixar um estranho<br />
+          entrar na sua <span class="violet">casa mais secreta</span>,<br />
+          mostrar as rachaduras nas paredes,<br />
+          os quartos que você nunca abriu —<br />
+          <br />
+          e ver que ele não foi embora.<br />
+          <br />
+          <span class="gold">Amar</span> é criar um idioma<br />
+          falado por apenas duas pessoas<br />
+          neste universo imenso.<br />
+          <br />
+          É encontrar em outro ser<br />
+          o eco do que você sempre foi,<br />
+          mas ainda não tinha nome.
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA FINAL -->
+    <section id="cta-final" aria-labelledby="cta-title">
+      <div class="cta-card reveal">
+        <div class="pulse-ring" aria-hidden="true"></div>
+        <div class="pulse-ring" aria-hidden="true"></div>
+        <div class="pulse-ring" aria-hidden="true"></div>
+        <h2 id="cta-title">Sinta o amor hoje</h2>
+        <p>
+          Diga àqueles que você ama o quanto eles significam para você.
+          O amor não espera — ele acontece no agora, nas pequenas atitudes de cada dia.
+        </p>
+        <a href="#hero" class="btn-primary" id="cta-voltar-topo">
+          ♥ Começar de novo
+        </a>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer role="contentinfo">
+      <span class="footer-logo">Amor</span>
+      <p>Feito com ♥ &nbsp;—&nbsp; porque o amor merece ser celebrado todos os dias</p>
+    </footer>
+
+  </div><!-- /content-wrapper -->
+
+  <script>
+    /* ── Floating Hearts ── */
+    const heartsLayer = document.getElementById('heartsLayer');
+    const heartSymbols = ['♥', '♡', '❤', '💕', '💖', '💗', '💓', '✨'];
+    function spawnHeart() {
+      const el = document.createElement('div');
+      el.className = 'heart-particle';
+      el.textContent = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+      el.style.left = Math.random() * 100 + 'vw';
+      el.style.fontSize = (14 + Math.random() * 22) + 'px';
+      el.style.animationDuration = (8 + Math.random() * 10) + 's';
+      el.style.animationDelay = (Math.random() * 3) + 's';
+      const hue = Math.random() < 0.5 ? '#ff7096' : (Math.random() < 0.5 ? '#a855f7' : '#fcd34d');
+      el.style.color = hue;
+      heartsLayer.appendChild(el);
+      setTimeout(() => el.remove(), 21000);
+    }
+    setInterval(spawnHeart, 700);
+    for (let i = 0; i < 8; i++) setTimeout(spawnHeart, i * 400);
+
+    /* ── Scroll Reveal ── */
+    const revealEls = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          entry.target.style.transitionDelay = (i * 0.05) + 's';
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    revealEls.forEach(el => observer.observe(el));
+
+    /* ── Counter Animation ── */
+    function animateCounter(el, target) {
+      let current = 0;
+      const step = Math.max(1, Math.floor(target / 40));
+      const interval = setInterval(() => {
+        current += step;
+        if (current >= target) { current = target; clearInterval(interval); }
+        const suffixes = { 'stat-2': ' áreas', 'stat-4': '' };
+        const id = el.id;
+        el.textContent = current + (suffixes[id] !== undefined ? suffixes[id] : (id === 'stat-2' ? ' áreas' : ''));
+      }, 40);
+    }
+    const counterObs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const el = entry.target;
+          animateCounter(el, parseInt(el.dataset.target));
+          counterObs.unobserve(el);
+        }
+      });
+    }, { threshold: 0.5 });
+    document.querySelectorAll('[data-target]').forEach(el => counterObs.observe(el));
+
+    /* ── Nav Shrink on Scroll ── */
+    const nav = document.getElementById('main-nav');
+    window.addEventListener('scroll', () => {
+      nav.style.background = window.scrollY > 60
+        ? 'rgba(15,5,20,0.92)'
+        : 'rgba(15,5,20,0.6)';
+    }, { passive: true });
+
+    /* ── Tilt on Cards ── */
+    document.querySelectorAll('.love-card').forEach(card => {
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width - 0.5;
+        const y = (e.clientY - rect.top)  / rect.height - 0.5;
+        card.style.transform = `translateY(-10px) rotateX(${-y * 8}deg) rotateY(${x * 8}deg) scale(1.01)`;
+      });
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = '';
+      });
+    });
+  </script>
+</body>
+</html>
